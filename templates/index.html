@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Monitoring Dashboard</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #1e1e2d;
+            color: #ffffff;
+        }
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #00ff99;
+        }
+        .card {
+            display: inline-block;
+            width: 300px;
+            padding: 20px;
+            margin: 20px;
+            background: #282846;
+            box-shadow: 0px 0px 20px rgba(0, 255, 153, 0.5);
+            border-radius: 10px;
+            text-align: center;
+        }
+        span {
+            font-size: 22px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+<h1>🚗 Vehicle Monitoring Dashboard</h1>
+
+<div class="card">
+    <h2>Speed</h2>
+    <span id="speed">0 km/h</span>
+</div>
+
+<div class="card">
+    <h2>Location</h2>
+    <span id="location">Fetching...</span>
+</div>
+
+<div class="card">
+    <h2>Object Distance</h2>
+    <span id="distance">N/A</span>
+</div>
+
+<script>
+    const socket = io();
+
+    socket.on("updateData", function (data) {
+        document.getElementById("speed").innerText = `${data.speed_kph.toFixed(2)} km/h`;
+        document.getElementById("location").innerText = `${data.latitude}, ${data.longitude}`;
+
+        if (data.object_distance) {
+            document.getElementById("distance").innerText = `${data.object_distance.toFixed(2)} cm`;
+        } else {
+            document.getElementById("distance").innerText = "N/A";
+        }
+    });
+</script>
+</body>
+</html>
